@@ -1,19 +1,19 @@
 import EN from "./en";
-import JP from "./jp";
+import JA from "./ja";
 import { merge } from "../utils/merge";
 
-export type { LocaleType, RequiredLocaleType } from "./cn";
+export type { LocaleType, RequiredLocaleType } from "./ja";
 
-export const AllLangs = ["en", "jp"] as const;
+export const AllLangs = ["en", "ja"] as const;
 export type Lang = (typeof AllLangs)[number];
 
 export const ALL_LANG_OPTIONS: Record<Lang, string> = {
   en: "English",
-  jp: "日本語",
+  ja: "日本語",
 };
 
 const LANG_KEY = "lang";
-const DEFAULT_LANG = "jp";
+const DEFAULT_LANG = "ja";
 
 function getItem(key: string) {
   try {
@@ -63,10 +63,10 @@ export function changeLang(lang: Lang) {
 const fallbackLang = EN;
 const targetLang = {
   en: EN,
-  jp: JP,
-}[getLang()] as typeof JP;
+  ja: JA,
+}[getLang()] as typeof JA;
 
 // if target lang missing some fields, it will use fallback lang string
 merge(fallbackLang, targetLang);
 
-export default fallbackLang as typeof JP;
+export default fallbackLang as typeof JA;
