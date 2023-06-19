@@ -1,7 +1,7 @@
 import { SubmitKey } from "../store/config";
 import type { LocaleType } from "./index";
 
-const jp: LocaleType = {
+const ja = {
   WIP: "この機能は開発中です……",
   Error: {
     Unauthorized:
@@ -229,4 +229,12 @@ const jp: LocaleType = {
   },
 };
 
-export default jp;
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+export type LocaleType = DeepPartial<typeof ja>;
+export type RequiredLocaleType = typeof ja;
+
+export default ja;

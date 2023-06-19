@@ -44,3 +44,6 @@ dev
 
 *.key
 *.key.pub
+
+# yarn lock file, needed if build on vercel or github actions
+yarn.lock 
