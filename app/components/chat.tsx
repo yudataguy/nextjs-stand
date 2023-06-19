@@ -717,7 +717,8 @@ export function Chat() {
   const isChat = location.pathname === Path.Chat;
 
   const autoFocus = !isMobileScreen || isChat; // only focus in chat page
-  const showMaxIcon = !isMobileScreen && !clientConfig?.isApp;
+  // const showMaxIcon = !isMobileScreen && !clientConfig?.isApp;
+  const showMaxIcon = false;
 
   useCommand({
     fill: setUserInput,
