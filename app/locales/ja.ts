@@ -1,11 +1,18 @@
 import { SubmitKey } from "../store/config";
-import type { LocaleType } from "./index";
+// import type { LocaleType } from "./index";
 
 const ja = {
   WIP: "この機能は開発中です",
   Error: {
     Unauthorized:
       "現在は未承認状態です。左下の設定ボタンをクリックし、アクセスパスワードかOpenAIのAPIキーを入力してください。",
+  },
+  Auth: {
+    Title: "アクセスコードが必要です",
+    Tips: "以下にアクセスコードを入力してください",
+    Input: "アクセスコード",
+    Confirm: "確認",
+    Later: "後で",
   },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 通のチャット`,
@@ -20,6 +27,19 @@ const ja = {
       Stop: "停止",
       Retry: "リトライ",
       Delete: "削除",
+    },
+    InputActions: {
+      Stop: "停止",
+      ToBottom: "最新に移動",
+      Theme: {
+        auto: "自動",
+        light: "明るいテーマ",
+        dark: "暗いテーマ",
+      },
+      Prompt: "プロンプト",
+      Masks: "マスク",
+      Clear: "コンテキストをクリア",
+      Settings: "設定",
     },
     Rename: "チャットの名前を変更",
     Typing: "入力中…",
@@ -42,6 +62,25 @@ const ja = {
     Download: "ファイルをダウンロード",
     MessageFromYou: "あなたからのメッセージ",
     MessageFromChatGPT: "ChatGPTからのメッセージ",
+    Share: "Share to ShareGPT",
+    Format: {
+      Title: "エクスポート形式",
+      SubTitle: "MarkdownまたはPNGイメージ",
+    },
+    IncludeContext: {
+      Title: "コンテキストの含める",
+      SubTitle: "コンテキストプロンプトをマスクに含めるかどうか",
+    },
+    Steps: {
+      Select: "選択",
+      Preview: "プレビュー",
+    },
+  },
+  Select: {
+    Search: "検索",
+    All: "すべて選択",
+    Latest: "最新を選択",
+    Clear: "クリア",
   },
   Memory: {
     Title: "履歴メモリ",
@@ -144,6 +183,10 @@ const ja = {
       SubTitle: "暗号化アクセスが有効になっています",
       Placeholder: "アクセスパスワードを入力してください",
     },
+    Endpoint: {
+      Title: "エンドポイント",
+      SubTitle: "カスタムエンドポイントは http(s):// で始まる必要があります",
+    },
     Model: "モデル (model)",
     Temperature: {
       Title: "ランダム性 (temperature)",
@@ -181,6 +224,8 @@ const ja = {
     Toast: (x: any) => `キャラクターが ${x} 件設定されました`,
     Edit: "キャラクタープリセットとモデル設定",
     Add: "追加",
+    Clear: "コンテキストがクリアされました",
+    Revert: "元に戻す",
   },
   Plugin: { Name: "プラグイン" },
   Mask: {

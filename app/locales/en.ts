@@ -62,7 +62,7 @@ const en: RequiredLocaleType = {
     Download: "Download",
     MessageFromYou: "Message From You",
     MessageFromChatGPT: "Message From ChatGPT",
-    Share: "Share to ShareGPT",
+    Share: "ShareGPTに共有",
     Format: {
       Title: "Export Format",
       SubTitle: "Markdown or PNG Image",
