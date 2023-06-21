@@ -5,12 +5,14 @@ import styles from "./home.module.scss";
 import { IconButton } from "./button";
 import SettingsIcon from "../icons/settings.svg";
 import GithubIcon from "../icons/github.svg";
+import JapaneseIcon from "../icons/japanese-letter.svg";
+import EnglishIcon from "../icons/english-letter.svg";
 import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
 
-import Locale from "../locales";
+import Locale, { changeLang, getLang } from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
 
@@ -119,11 +121,9 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          ChatGPT Next
+          BUNSHO AI
         </div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
+        <div className={styles["sidebar-sub-title"]}>ChatGPTパワード</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
@@ -162,15 +162,29 @@ export function SideBar(props: { className?: string }) {
               }}
             />
           </div>
-          <div className={styles["sidebar-action"]}>
+          {/* <div className={styles["sidebar-action"]}>
             <Link to={Path.Settings}>
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
-          </div>
-          <div className={styles["sidebar-action"]}>
+          </div> */}
+          {/* <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank">
               <IconButton icon={<GithubIcon />} shadow />
             </a>
+          </div> */}
+          <div
+            className={styles["sidebar-action"]}
+            onClick={() => {
+              const currentLang = getLang();
+              const newLang = currentLang === "en" ? "ja" : "en";
+              changeLang(newLang);
+            }}
+          >
+            {getLang() === "en" ? (
+              <IconButton icon={<JapaneseIcon />} shadow />
+            ) : (
+              <IconButton icon={<EnglishIcon />} shadow />
+            )}
           </div>
         </div>
         <div>
