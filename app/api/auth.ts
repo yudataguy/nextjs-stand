@@ -42,7 +42,9 @@ export function auth(req: NextRequest) {
   if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !token) {
     return {
       error: true,
-      msg: !accessCode ? "empty access code" : "wrong access code",
+      msg: !accessCode
+        ? "アクセスコードが未入力です"
+        : "アクセスコードが間違っています",
     };
   }
 
