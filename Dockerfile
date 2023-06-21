@@ -15,7 +15,7 @@ FROM base AS builder
 
 RUN apk update && apk add --no-cache git
 
-ENV OPENAI_API_KEY="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"
+ENV OPENAI_API_KEY=""
 ENV CODE="fukuras"
 
 WORKDIR /app
