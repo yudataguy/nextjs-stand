@@ -30,7 +30,7 @@ WORKDIR /app
 RUN apk add proxychains-ng
 
 ENV PROXY_URL=""
-ENV OPENAI_API_KEY="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"
+ENV OPENAI_API_KEY=""
 ENV CODE="fukuras"
 
 COPY --from=builder /app/public ./public
