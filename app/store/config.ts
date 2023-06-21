@@ -23,7 +23,7 @@ export const DEFAULT_CONFIG = {
   fontSize: 14,
   theme: Theme.Auto as Theme,
   // tightBorder: !!getClientConfig()?.isApp,
-  tightBorder: false,
+  tightBorder: true,
   sendPreviewBubble: false,
   sidebarWidth: 300,
 
