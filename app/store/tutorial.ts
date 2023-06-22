@@ -8,26 +8,19 @@ export const DEFAULT_TUTORIAL = {
   steps: [
     {
       content: "Let's begin our journey!",
-      //   locale: { skip: <strong aria-label="skip">SKIP</strong> },
-      placement: "center",
+      placement: "center" as const,
       target: "body",
     },
     {
       content: "These are our super awesome projects!",
-      placement: "bottom",
+      placement: "bottom" as const,
       target: ".newChatButton",
       title: "Projects",
     },
     {
       content: "You can also create new projects by clicking here",
-      placement: "bottom",
+      placement: "bottom" as const,
       target: ".languageButton",
-      title: "New Project",
-    },
-    {
-      content: "You can also create new projects by clicking here",
-      placement: "bottom",
-      target: ".new-project",
       title: "New Project",
     },
   ],

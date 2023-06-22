@@ -43,12 +43,6 @@ export function Loading(props: { noLogo?: boolean }) {
   );
 }
 
-interface JoyrideState {
-  run: boolean;
-  steps: Step[];
-  stepIndex: number;
-}
-
 const Settings = dynamic(async () => (await import("./settings")).Settings, {
   loading: () => <Loading noLogo />,
 });
