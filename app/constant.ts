@@ -1,4 +1,4 @@
-export const OWNER = "Yidadaa";
+export const OWNER = "Bunsho AI";
 export const REPO = "ChatGPT-Next-Web";
 export const REPO_URL = `https://github.com/${OWNER}/${REPO}`;
 export const ISSUE_URL = `https://github.com/${OWNER}/${REPO}/issues`;
@@ -33,6 +33,7 @@ export enum StoreKey {
   Mask = "mask-store",
   Prompt = "prompt-store",
   Update = "chat-update",
+  Tutorial = "chat-tutorial",
 }
 
 export const MAX_SIDEBAR_WIDTH = 500;

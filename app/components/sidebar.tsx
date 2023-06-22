@@ -11,10 +11,12 @@ import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
+import QuestionIcon from "../icons/question.svg";
 
 import Locale, { changeLang, getLang } from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
+import { useTutorialStore } from "../store/tutorial";
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -110,6 +112,7 @@ export function SideBar(props: { className?: string }) {
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
+  const tutorial = useTutorialStore();
 
   useHotKey();
 
@@ -173,7 +176,7 @@ export function SideBar(props: { className?: string }) {
             </a>
           </div> */}
           <div
-            className={styles["sidebar-action"]}
+            className={styles["sidebar-action"] + " " + "languageButton"}
             onClick={() => {
               const currentLang = getLang();
               const newLang = currentLang === "en" ? "ja" : "en";
@@ -186,8 +189,18 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<EnglishIcon />} shadow />
             )}
           </div>
+          <div className={styles["sidebar-action"]}>
+            <IconButton
+              icon={<QuestionIcon />}
+              shadow
+              onClick={() => {
+                console.log("run tutorial");
+                tutorial.update((tutorial) => (tutorial.run = true));
+              }}
+            />
+          </div>
         </div>
-        <div>
+        <div className="newChatButton">
           <IconButton
             icon={<AddIcon />}
             text={shouldNarrow ? undefined : Locale.Home.NewChat}

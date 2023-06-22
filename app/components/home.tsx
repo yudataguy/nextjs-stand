@@ -21,10 +21,18 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import Joyride, {
+  ACTIONS,
+  CallBackProps,
+  EVENTS,
+  STATUS,
+  Step,
+} from "react-joyride";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
+import { useTutorialStore } from "../store/tutorial";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -33,6 +41,12 @@ export function Loading(props: { noLogo?: boolean }) {
       <LoadingIcon />
     </div>
   );
+}
+
+interface JoyrideState {
+  run: boolean;
+  steps: Step[];
+  stepIndex: number;
 }
 
 const Settings = dynamic(async () => (await import("./settings")).Settings, {
@@ -108,9 +122,21 @@ const loadAsyncGoogleFont = () => {
 function Screen() {
   const config = useAppConfig();
   const location = useLocation();
+  const tutorial = useTutorialStore();
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
+
+  const handleJoyrideCallback = (data: CallBackProps) => {
+    const { status } = data;
+    const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status)) {
+      tutorial.update((tutorial) => {
+        tutorial.run = false;
+      });
+    }
+  };
 
   useEffect(() => {
     loadAsyncGoogleFont();
@@ -133,6 +159,14 @@ function Screen() {
         </>
       ) : (
         <>
+          <Joyride
+            callback={handleJoyrideCallback}
+            run={tutorial.run}
+            continuous
+            showProgress
+            showSkipButton
+            steps={tutorial.steps}
+          />
           <SideBar className={isHome ? styles["sidebar-show"] : ""} />
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
