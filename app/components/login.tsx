@@ -73,7 +73,7 @@ export function LoginPage() {
             onClick={loginWithGmail}
           />
         </div>
-        <IconButton text={"Registor"} onClick={goRegister} />
+        <IconButton text={"Register"} onClick={goRegister} />
       </div>
     </div>
   );
