@@ -20,11 +20,14 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
+import { auth } from "../firebase";
+import { User } from "firebase/auth";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -50,6 +53,17 @@ const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
 const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
+
+const LoginPage = dynamic(async () => (await import("./login")).LoginPage, {
+  loading: () => <Loading noLogo />,
+});
+
+const RegisterPage = dynamic(
+  async () => (await import("./register")).RegisterPage,
+  {
+    loading: () => <Loading noLogo />,
+  },
+);
 
 export function useSwitchTheme() {
   const config = useAppConfig();
@@ -105,16 +119,48 @@ const loadAsyncGoogleFont = () => {
   document.head.appendChild(linkEl);
 };
 
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  path: string;
+  isLoggedIn: boolean;
+}
+
+function ProtectedRoute({ children, path, isLoggedIn }: ProtectedRouteProps) {
+  const location = useLocation();
+  if (!isLoggedIn && location.pathname !== Path.Login) {
+    return <Navigate to={Path.Login} replace />;
+  }
+  return <>{children}</>;
+}
+
 function Screen() {
+  const [isloading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | undefined>();
   const config = useAppConfig();
   const location = useLocation();
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
+  const isLoginPage = location.pathname === Path.Login;
+  const isRegisterPage = location.pathname === Path.Register;
   const isMobileScreen = useMobileScreen();
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user ?? undefined);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (isloading) return <Loading noLogo />;
 
   return (
     <div
@@ -133,15 +179,32 @@ function Screen() {
         </>
       ) : (
         <>
-          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+          {isLoggedIn && (
+            <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+          )}
 
-          <div className={styles["window-content"]} id={SlotID.AppBody}>
+          <div className={styles["window-content"]} id={SlotID.AppBody ?? ""}>
             <Routes>
-              <Route path={Path.Home} element={<Chat />} />
-              <Route path={Path.NewChat} element={<NewChat />} />
-              <Route path={Path.Masks} element={<MaskPage />} />
-              <Route path={Path.Chat} element={<Chat />} />
-              <Route path={Path.Settings} element={<Settings />} />
+              <Route
+                path="*"
+                element={
+                  <ProtectedRoute path="*" isLoggedIn={isLoggedIn}>
+                    <Routes>
+                      <Route path={Path.Home} element={<Chat />} />
+                      <Route path={Path.NewChat} element={<NewChat />} />
+                      <Route path={Path.Masks} element={<MaskPage />} />
+                      <Route path={Path.Chat} element={<Chat />} />
+                      <Route path={Path.Settings} element={<Settings />} />
+                    </Routes>
+                  </ProtectedRoute>
+                }
+              />
+              {!isLoggedIn && (
+                <Route path={Path.Login} element={<LoginPage />} />
+              )}
+              {!isLoggedIn && (
+                <Route path={Path.Register} element={<RegisterPage />} />
+              )}
             </Routes>
           </div>
         </>
