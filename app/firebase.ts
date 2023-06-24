@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
@@ -8,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
+  UserCredential,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -17,33 +17,36 @@ import {
   where,
   addDoc,
 } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAx0Z6ZVaBHz6SMGrGcc7u-Wq2a6wexct0",
+//   authDomain: "bunshoco.firebaseapp.com",
+//   projectId: "bunshoco",
+//   storageBucket: "bunshoco.appspot.com",
+//   messagingSenderId: "857463691753",
+//   appId: "1:857463691753:web:4ac544baff389717619378",
+//   measurementId: "G-VEJSW31QWW",
+// };
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAx0Z6ZVaBHz6SMGrGcc7u-Wq2a6wexct0",
-  authDomain: "bunshoco.firebaseapp.com",
-  projectId: "bunshoco",
-  storageBucket: "bunshoco.appspot.com",
-  messagingSenderId: "857463691753",
-  appId: "1:857463691753:web:4ac544baff389717619378",
-  measurementId: "G-VEJSW31QWW",
+  apiKey: "AIzaSyBjQEna-3VRjM8BdYgIm60udYXVryfhRtg",
+  authDomain: "assement-73946.firebaseapp.com",
+  projectId: "assement-73946",
+  storageBucket: "assement-73946.appspot.com",
+  messagingSenderId: "525200984985",
+  appId: "1:525200984985:web:7f0b3ece7c94398e7a6108",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-const signInWithGoogle = async () => {
+const signInWithGoogle = async (): Promise<UserCredential | Error> => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
+
     const user = res.user;
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
@@ -55,18 +58,22 @@ const signInWithGoogle = async () => {
         email: user.email,
       });
     }
+    return res;
   } catch (err: any) {
-    console.error(err);
-    alert(err.message);
+    return err;
   }
 };
 
-const logInWithEmailAndPassword = async (email: string, password: string) => {
+const logInWithEmailAndPassword = async (
+  email: string,
+  password: string,
+): Promise<UserCredential | Error> => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const user = await signInWithEmailAndPassword(auth, email, password);
+    return user;
   } catch (err: any) {
     console.error(err);
-    alert(err.message);
+    return err;
   }
 };
 
@@ -100,8 +107,13 @@ const sendPasswordReset = async (email: string) => {
   }
 };
 
-const logout = () => {
-  signOut(auth);
+const logout = async (): Promise<Boolean | Error> => {
+  try {
+    await signOut(auth);
+    return true;
+  } catch (error: any) {
+    return error;
+  }
 };
 
 export {
