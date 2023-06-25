@@ -11,6 +11,7 @@ import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
+import LogoutIcon from "../icons/logout.svg";
 
 import Locale, { changeLang, getLang } from "../locales";
 
@@ -28,6 +29,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showToast } from "./ui-lib";
+import { logout } from "../firebase";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -185,6 +187,21 @@ export function SideBar(props: { className?: string }) {
             ) : (
               <IconButton icon={<EnglishIcon />} shadow />
             )}
+          </div>
+          <div className={styles["sidebar-action"]}>
+            <IconButton
+              icon={<LogoutIcon />}
+              onClick={() => {
+                if (window.confirm("Are you sure you want to logout?")) {
+                  logout()
+                    .then((response) => {
+                      if (response) navigate(Path.Login);
+                    })
+                    .catch((e) => console.error(e));
+                }
+              }}
+              shadow
+            />
           </div>
         </div>
         <div>

@@ -20,11 +20,14 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
+import { auth } from "../firebase";
+import { User } from "firebase/auth";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -50,6 +53,17 @@ const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
 const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
+
+const LoginPage = dynamic(async () => (await import("./login")).LoginPage, {
+  loading: () => <Loading noLogo />,
+});
+
+const RegisterPage = dynamic(
+  async () => (await import("./register")).RegisterPage,
+  {
+    loading: () => <Loading noLogo />,
+  },
+);
 
 export function useSwitchTheme() {
   const config = useAppConfig();
@@ -106,15 +120,59 @@ const loadAsyncGoogleFont = () => {
 };
 
 function Screen() {
+  const [isloading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | undefined>();
   const config = useAppConfig();
   const location = useLocation();
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
+  const isLoginPage = location.pathname === Path.Login;
+  const isRegisterPage = location.pathname === Path.Register;
   const isMobileScreen = useMobileScreen();
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user ?? undefined);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+    }
+  }, []);
+
+  if (isloading) return <Loading noLogo />;
+
+  if (!isLoggedIn) {
+    return (
+      <div
+        className={
+          styles.container +
+          ` ${
+            config.tightBorder && !isMobileScreen
+              ? styles["tight-container"]
+              : styles.container
+          }`
+        }
+      >
+        <Routes>
+          <Route path={"*"} element={<LoginPage />} />
+          <Route path={Path.Login} element={<LoginPage />} />
+          <Route path={Path.Register} element={<RegisterPage />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <div
