@@ -119,20 +119,6 @@ const loadAsyncGoogleFont = () => {
   document.head.appendChild(linkEl);
 };
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  path: string;
-  isLoggedIn: boolean;
-}
-
-function ProtectedRoute({ children, path, isLoggedIn }: ProtectedRouteProps) {
-  const location = useLocation();
-  if (!isLoggedIn && location.pathname !== Path.Login) {
-    return <Navigate to={Path.Login} replace />;
-  }
-  return <>{children}</>;
-}
-
 function Screen() {
   const [isloading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | undefined>();
@@ -160,7 +146,33 @@ function Screen() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+    }
+  }, []);
+
   if (isloading) return <Loading noLogo />;
+
+  if (!isLoggedIn) {
+    return (
+      <div
+        className={
+          styles.container +
+          ` ${
+            config.tightBorder && !isMobileScreen
+              ? styles["tight-container"]
+              : styles.container
+          }`
+        }
+      >
+        <Routes>
+          <Route path={"*"} element={<LoginPage />} />
+          <Route path={Path.Login} element={<LoginPage />} />
+          <Route path={Path.Register} element={<RegisterPage />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -179,32 +191,15 @@ function Screen() {
         </>
       ) : (
         <>
-          {isLoggedIn && (
-            <SideBar className={isHome ? styles["sidebar-show"] : ""} />
-          )}
+          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
 
-          <div className={styles["window-content"]} id={SlotID.AppBody ?? ""}>
+          <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route
-                path="*"
-                element={
-                  <ProtectedRoute path="*" isLoggedIn={isLoggedIn}>
-                    <Routes>
-                      <Route path={Path.Home} element={<Chat />} />
-                      <Route path={Path.NewChat} element={<NewChat />} />
-                      <Route path={Path.Masks} element={<MaskPage />} />
-                      <Route path={Path.Chat} element={<Chat />} />
-                      <Route path={Path.Settings} element={<Settings />} />
-                    </Routes>
-                  </ProtectedRoute>
-                }
-              />
-              {!isLoggedIn && (
-                <Route path={Path.Login} element={<LoginPage />} />
-              )}
-              {!isLoggedIn && (
-                <Route path={Path.Register} element={<RegisterPage />} />
-              )}
+              <Route path={Path.Home} element={<Chat />} />
+              <Route path={Path.NewChat} element={<NewChat />} />
+              <Route path={Path.Masks} element={<MaskPage />} />
+              <Route path={Path.Chat} element={<Chat />} />
+              <Route path={Path.Settings} element={<Settings />} />
             </Routes>
           </div>
         </>
