@@ -46,13 +46,14 @@ justify-content: center;
     flex-direction: column;
 
     .button-container{
-
+      justify-content: center;
+      align-items: center;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
     }    
 
     button:not(:last-child) {
-   margin-right: 10px;
+   margin-bottom: 10px;
     }
   }
 }

@@ -6,7 +6,8 @@ import { Path } from "../constant";
 import Locale from "../locales";
 
 import BotIcon from "../icons/bot.svg";
-import GmailIcon from "../icons/gmail-icon.svg";
+import GoogleIcon from "../icons/google.svg";
+import MailIcon from "../icons/email.svg";
 import { useState } from "react";
 import { logInWithEmailAndPassword, signInWithGoogle } from "../firebase";
 
@@ -14,6 +15,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const isDisabled = !email || !password;
 
   const goHome = () => navigate(Path.Home);
   const goRegister = () => navigate(Path.Register);
@@ -66,10 +68,18 @@ export function LoginPage() {
       </div>
       <div className={styles["auth-actions"]}>
         <div className={styles["button-container"]}>
-          <IconButton text={"Login"} type="primary" onClick={handleLogin} />
           <IconButton
+            disabled={isDisabled}
+            icon={<MailIcon />}
+            text={"Sign in with email"}
+            type="danger"
+            onClick={handleLogin}
+          />
+          <IconButton
+            fillPath={false}
             type="primary"
-            icon={<GmailIcon />}
+            icon={<GoogleIcon />}
+            text={"Sign in with Google"}
             onClick={loginWithGmail}
           />
         </div>
