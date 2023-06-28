@@ -12,34 +12,42 @@ export function IconButton(props: {
   className?: string;
   title?: string;
   disabled?: boolean;
+  fillPath?: boolean;
 }) {
+  const {
+    onClick,
+    icon,
+    type,
+    text,
+    bordered,
+    shadow,
+    className,
+    title,
+    disabled,
+    fillPath = true,
+  } = props;
+
+  const buttonClasses = [styles["icon-button"]];
+
+  if (bordered) buttonClasses.push(styles.border);
+  if (shadow) buttonClasses.push(styles.shadow);
+  if (type) buttonClasses.push(styles[type]);
+  if (className) buttonClasses.push(className);
+  if (fillPath !== false) buttonClasses.push(styles.fillPath);
+
+  const iconClasses = [styles["icon-button-icon"]];
+  if (type === "primary") iconClasses.push("no-dark");
+
   return (
     <button
-      className={
-        styles["icon-button"] +
-        ` ${props.bordered && styles.border} ${props.shadow && styles.shadow} ${
-          props.className ?? ""
-        } clickable ${styles[props.type ?? ""]}`
-      }
-      onClick={props.onClick}
-      title={props.title}
-      disabled={props.disabled}
+      className={buttonClasses.join(" ")}
+      onClick={onClick}
+      title={title}
+      disabled={disabled}
       role="button"
     >
-      {props.icon && (
-        <div
-          className={
-            styles["icon-button-icon"] +
-            ` ${props.type === "primary" && "no-dark"}`
-          }
-        >
-          {props.icon}
-        </div>
-      )}
-
-      {props.text && (
-        <div className={styles["icon-button-text"]}>{props.text}</div>
-      )}
+      {icon && <div className={iconClasses.join(" ")}>{icon}</div>}
+      {text && <div className={styles["icon-button-text"]}>{text}</div>}
     </button>
   );
 }

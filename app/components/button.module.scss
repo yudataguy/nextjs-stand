@@ -22,7 +22,14 @@
   &.primary {
     background-color: var(--primary);
     color: white;
+  }
 
+  &.danger {
+    background-color: var(--danger);
+    color: white;
+  }
+
+  &.fillPath {
     path {
       fill: white !important;
     }
